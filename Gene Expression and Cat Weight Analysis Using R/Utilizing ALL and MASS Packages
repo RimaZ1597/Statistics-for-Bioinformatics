@@ -1,1 +1,71 @@
+rm(list=ls())
+#1
+library(multtest)
+data(golub)
+#A
+gene_name <- "MSN Moesin"
+gene_row_index <- grep(gene_name, golub.gnames[, 2])
+
+if (length(gene_row_index) == 0) {
+  cat("Gene", gene_name, "not found in golub.gnames.\n")
+} else {
+  cat("Gene", gene_name, "found at row index:", gene_row_index, "\n")
+  
+  gene_expression <- golub[gene_row_index, ]
+  effect_size_a <- mean(gene_expression) / sd(gene_expression)
+  cat("Effect size for gene MSN Moesin:", effect_size_a, "\n")
+}
+
+#B
+if (!exists("gol.fac")) {
+  gol.fac <- factor(golub.cl, levels = 0:1, labels = c("ALL", "AML"))
+}
+effect_size_b <- apply(golub[1:2000, gol.fac == "AML"], 2, function(x) mean(x, na.rm = TRUE) / sd(x, na.rm = TRUE))
+print(effect_size_b)
+
+#C
+hist(effect_size_b, main = "Histogram of Effect Sizes for AML Patients", xlab = "Effect Size")
+
+#D
+top_3_indices <- order(effect_size_b, decreasing = TRUE)[1:3]
+top_3_gene_names <- golub.gnames[top_3_indices, 2]
+cat("Top 3 largest effect sizes:\n", effect_size_b[top_3_indices], "\n")
+cat("Corresponding gene names:\n", top_3_gene_names, "\n")
+
+rm(list=ls())
+#2
+library(ALL)
+data(ALL)
+#A
+table_data <- table(ALL$BT)
+print(table_data)
+pie(table_data, labels = names(table_data), main = "Leukemia Patients Disease Type/Stage")
+#B
+B4exp<-exprs(ALL[,ALL$BT=="B4"]) 
+boxplot(B4exp, col = 12, main = "Gene Expressions for Patients in Disease Stage B4")
+#C
+patient_mean <- apply(B4exp, 2, mean)
+print(patient_mean)
+
+
+rm(list=ls())
+#3
+library(MASS)
+data(cats)
+#A
+male_cats <- sum(cats$Sex == "M" & cats$Bwt > 3)
+cat("Number of male cats weighing more than 3 kg:", male_cats, "\n")
+
+#B
+female_cats <- subset(cats, Sex == "F", select = c(Bwt, Hwt))
+write.csv(female_cats, file = "CatsF.csv", row.names = FALSE)
+cat("Data for female cats saved to CatsF.csv\n")
+
+#C
+plot(cats$Hwt, cats$Bwt, col = ifelse(cats$Sex == "M", "purple", "red"), pch = ifelse(cats$Sex == "M",18, 8), 
+     xlab = "Heart weight (g)", ylab = "Body weight (kg)")
+
+legend("topleft",c("Male", "Female"), col = c("purple", "red"), pch = c(18, 8))
+
+
 
