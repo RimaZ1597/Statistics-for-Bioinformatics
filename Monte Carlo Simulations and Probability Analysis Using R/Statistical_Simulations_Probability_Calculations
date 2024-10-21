@@ -1,1 +1,76 @@
+rm(list=ls())
+#3 
+# Number of simulations
+nsim <- 50000
+
+# Random samples from chi-square distributions
+X1 <- rchisq(nsim, df = 3)
+X2 <- rchisq(nsim, df = 6)
+
+# Define Y1 and Y2
+Y1 <- (1/3) * X1
+Y2 <- (1/6) * X2
+
+# Define Z
+Z <- Y1 / Y2
+
+# Calculate the mean
+mean_Z <- mean(Z)
+
+# Estimated mean result 
+cat("Estimated mean of Z:", mean_Z, "\n")
+
+# Create a Q-Q plot comparing Z to the F-distribution
+qqplot(qf(ppoints(nsim), df1 = 3, df2 = 6), Z, main = "Q-Q plot of Sample simulation vs. F-distribution",
+       xlab = "F-distribution", ylab = "Simulation Results")
+
+# Add a reference line to the Q-Q plot
+qqline(Z, distribution = function(p) qf(p, df1 = 3, df2 = 6), col = " red")
+
+
+#4
+rm(list=ls())
+
+mu <- -1  # E(X)
+sd <- sqrt(12)  # Standard deviation of X
+n <- 300  # Number of samples
+
+# (a)
+mean_X <- mu
+sigma_X <- sd / sqrt(n)  # Standard deviation of Xbar
+
+# Print the results
+cat("E(X) =", mean_X, "\n")
+cat("Standard Deviation of The Sample Mean =", sigma_X, "\n")
+
+# (b) Calculate P(X ≤ -0.9)
+z <- (-0.9 - mu) / sigma_X
+# Calculate the probability 
+prob <- pnorm(z)
+# Print the result
+cat("P(X ≤ -0.9) =", prob, "\n")
+
+#5
+rm(list=ls())
+
+nsim <- 10000
+XmeanLess <- rep(NA, nsim)
+
+for (i in 1:nsim) {
+  data300 <- runif(300, min = -7, max = 5)
+  xbar <- mean(data300)
+  
+  # Check if the sample mean is less than or equal to -0.9
+  if (xbar <= -0.9) {
+    XmeanLess[i] <- 1  
+  } else {
+    XmeanLess[i] <- 0  
+  }
+}
+
+# Estimate the probability
+probability <- mean(XmeanLess)
+cat("Monte Carlo estimate of P(X ≤ -0.9):", probability, "\n")
+
+
 
