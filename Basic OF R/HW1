@@ -1,1 +1,57 @@
+rm(list=ls())
+#2
+#A
+# Create a vector X with 16 even integers between -20 and 20
+x <- seq(from = -20, to = 20, by = 2)[1:16]
 
+# Print or view the vector X
+print(x)
+length(x)
+
+y <- x^2 - 5*x
+
+
+print(y)
+#B
+max(y)
+#C
+min(y)
+#D
+sum(y)
+#E
+negative_values <- sum(y<0)
+print(negative_values)
+
+
+rm(list=ls())
+#3
+sum_total <- 0
+
+for(n in 1:20)
+{
+  sum_total <- sum_total + 2^n
+}
+print(sum_total)
+
+rm(list=ls())
+#4
+#A
+matrix_A <- matrix(1, nrow = 25, ncol = 2)
+print(matrix_A)
+
+#B
+matrix_A <- matrix(1, 1, nrow = 25, ncol = 2)
+matrix_A[, 1] <- 2 * (1:25)
+print(matrix_A)
+
+#c
+for (k in 1:25) 
+{
+  if (k %% 2 != 0) 
+  { matrix_A[k, 2] <- sqrt(k)
+  }
+  else {
+    matrix_A[k, 2] <- integrate(log, lower = exp(1), upper = k)$value
+  }
+}
+print(matrix_A)
